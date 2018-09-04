@@ -15,15 +15,21 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   tool_fskandalis
- * @copyright 2018, Fotis Skandalis
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Main file
+ *
+ * @package    tool_fskandalis
+ * @copyright  2018 Fotis Skandalis
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+require_once(__DIR__ . '/../../../config.php');
 
-$plugin->version   = 2018090401; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2018050800; // Requires this Moodle version.
-$plugin->release   = 'v1.1';     // Release name.
-$plugin->maturity  = MATURITY_STABLE;  // Maturity.
-$plugin->component = 'tool_fskandalis'; // Full name of the plugin (used for diagnostics).
+$url = new moodle_url('/admin/tool/fskandalis/index.php');
+
+$PAGE->set_context(context_system::instance());
+$PAGE->set_url($url);
+$PAGE->set_pagelayout('report');
+$PAGE->set_title(get_string('helloworld', 'tool_fskandalis'));
+$PAGE->set_heading(get_string('pluginname', 'tool_fskandalis'));
+
+echo get_string('helloworld', 'tool_fskandalis');
