@@ -15,15 +15,24 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   tool_fskandalis
- * @copyright 2018, Fotis Skandalis
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Callbacks for plugin tool_fskandalis
+ *
+ * @package    tool_fskandalis
+ * @copyright  2018 Fotis Skandalis
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018090501; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2018050800; // Requires this Moodle version.
-$plugin->release   = 'v1.3';     // Release name.
-$plugin->maturity  = MATURITY_STABLE;  // Maturity.
-$plugin->component = 'tool_fskandalis'; // Full name of the plugin (used for diagnostics).
+/**
+ * This function extends the navigation with the tool items
+ *
+ * @param navigation_node $navigation The navigation node to extend
+ * @param stdClass        $course     The course to object for the tool
+ * @param context         $context    The context of the course
+ */
+function tool_fskandalis_extend_navigation_course($navigation, $course, $context) {
+    $text = get_string('pluginname', 'tool_fskandalis');
+    $url = new moodle_url('/admin/tool/fskandalis/index.php', ['id' => $course->id]);
+    $navigation->add($text, $url);
+}
