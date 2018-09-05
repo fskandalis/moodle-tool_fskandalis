@@ -32,3 +32,6 @@ $string['timecreated'] = 'timecreated';
 $string['timemodified'] = 'timemodified';
 $string['fskandalis:edit'] = 'Edit tool_fskandalis data';
 $string['fskandalis:view'] = 'View tool_fskandalis data';
+$string['newrecord'] = 'Add new record';
+$string['editrecord'] = 'Edit record';
+$string['errornameexists'] = 'This name already exists!';

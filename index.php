@@ -48,4 +48,10 @@ echo html_writer::div(get_string('userinfo', 'tool_fskandalis', $user));
 
 $table = new tool_fskandalis_table('uniqid', $id);
 echo $table->out(10, true);
+
+if (has_capability('tool/fskandalis:edit', $context)) {
+    echo html_writer::div(html_writer::link(new moodle_url('/admin/tool/fskandalis/edit.php',
+        array('courseid' => $id)), get_string('newrecord', 'tool_fskandalis')));
+}
+
 echo $OUTPUT->footer();

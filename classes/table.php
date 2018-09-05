@@ -37,15 +37,27 @@ class tool_fskandalis_table extends table_sql {
 
     public function __construct($uniqueid, $courseid) {
         global $PAGE;
+
         parent::__construct($uniqueid);
-        $this->define_columns(array('name', 'completed', 'priority', 'timecreated', 'timemodified'));
-        $this->define_headers(array(
+
+        $this->context = context_course::instance($courseid);
+
+        $columns = array('name', 'completed', 'priority', 'timecreated', 'timemodified');
+        $headers = array(
             get_string('name', 'tool_fskandalis'),
             get_string('completed', 'tool_fskandalis'),
             get_string('priority', 'tool_fskandalis'),
             get_string('timecreated', 'tool_fskandalis'),
             get_string('timemodified', 'tool_fskandalis'),
-        ));
+        );
+
+        if (has_capability('tool/fskandalis:edit', $this->context)) {
+            $columns[] = 'edit';
+            $headers[] = '';
+        }
+
+        $this->define_columns($columns);
+        $this->define_headers($headers);
         $this->pageable(true);
         $this->collapsible(false);
         $this->sortable(false);
@@ -53,7 +65,7 @@ class tool_fskandalis_table extends table_sql {
 
         $this->define_baseurl($PAGE->url);
 
-        $this->set_sql('name, completed, priority, timecreated, timemodified',
+        $this->set_sql('id, name, completed, priority, timecreated, timemodified',
             '{tool_fskandalis}', 'courseid = ?', [$courseid]);
     }
 
@@ -67,6 +79,11 @@ class tool_fskandalis_table extends table_sql {
 
     protected function col_name($row) {
         return format_string($row->name, true);
+    }
+
+    protected function col_edit($row) {
+        $url = new moodle_url('/admin/tool/fskandalis/edit.php', array('id' => $row->id));
+        return html_writer::link($url, get_string('editrecord', 'tool_fskandalis'));
     }
 
     protected function col_timecreated($row) {
