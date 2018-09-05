@@ -32,7 +32,9 @@ defined('MOODLE_INTERNAL') || die();
  * @param context         $context    The context of the course
  */
 function tool_fskandalis_extend_navigation_course($navigation, $course, $context) {
-    $text = get_string('pluginname', 'tool_fskandalis');
-    $url = new moodle_url('/admin/tool/fskandalis/index.php', ['id' => $course->id]);
-    $navigation->add($text, $url);
+    if (has_capability('tool/fskandalis:view', $context)) {
+        $text = get_string('pluginname', 'tool_fskandalis');
+        $url = new moodle_url('/admin/tool/fskandalis/index.php', ['id' => $course->id]);
+        $navigation->add($text, $url);
+    }
 }

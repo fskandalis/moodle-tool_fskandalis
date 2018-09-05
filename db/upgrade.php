@@ -79,4 +79,6 @@ function xmldb_tool_fskandalis_upgrade($oldversion) {
         // Fskandalis savepoint reached.
         upgrade_plugin_savepoint(true, 2018090504, 'tool', 'fskandalis');
     }
+
+    return true;
 }
