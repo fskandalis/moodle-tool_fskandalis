@@ -37,13 +37,13 @@ class tool_fskandalis_form extends moodleform {
         $mform->addElement('text', 'name',
             get_string('name', 'tool_fskandalis'));
         $mform->setType('name', PARAM_NOTAGS);
-        
+
         $mform->addElement('advcheckbox', 'completed',
             get_string('completed', 'tool_fskandalis'));
 
         $mform->addElement('hidden', 'courseid');
         $mform->setType('courseid', PARAM_INT);
-        
+
         $this->add_action_buttons();
     }
 
