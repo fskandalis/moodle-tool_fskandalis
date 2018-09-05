@@ -24,3 +24,4 @@ defined('MOODLE_INTERNAL') || die();
 $string['pluginname'] = 'My first Moodle plugin';
 $string['helloworld'] = 'Hello World!';
 $string['idpassed'] = 'The id passed is {$a}';
+$string['userinfo'] = 'The firstname of user with username admin is {$a->firstname} and the lastname is {$a->lastname}';

@@ -24,7 +24,7 @@
 
 require_once(__DIR__ . '/../../../config.php');
 
-$id = required_param('id',PARAM_INT);
+$id = required_param('id', PARAM_INT);
 
 $url = new moodle_url('/admin/tool/fskandalis/index.php', array('id' => $id));
 
@@ -38,4 +38,6 @@ $PAGE->set_heading(get_string('pluginname', 'tool_fskandalis'));
 echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('helloworld', 'tool_fskandalis'));
 echo html_writer::span(get_string('idpassed', 'tool_fskandalis', $id));
+$user = $DB->get_record_sql("SELECT username, firstname, lastname FROM {user} WHERE username = ?", array('admin'));
+echo html_writer::div(get_string('userinfo', 'tool_fskandalis', $user));
 echo $OUTPUT->footer();
