@@ -40,4 +40,7 @@ echo $OUTPUT->heading(get_string('helloworld', 'tool_fskandalis'));
 echo html_writer::span(get_string('idpassed', 'tool_fskandalis', $id));
 $user = $DB->get_record_sql("SELECT username, firstname, lastname FROM {user} WHERE username = ?", array('admin'));
 echo html_writer::div(get_string('userinfo', 'tool_fskandalis', $user));
+
+$table = new tool_fskandalis_table('uniqid', $id);
+echo $table->out(10, true);
 echo $OUTPUT->footer();
