@@ -24,6 +24,8 @@
 
 require_once(__DIR__ . '/../../../config.php');
 
+$id = optional_param('id', 0, PARAM_INT);
+
 $url = new moodle_url('/admin/tool/fskandalis/index.php');
 
 $PAGE->set_context(context_system::instance());
@@ -32,4 +34,8 @@ $PAGE->set_pagelayout('report');
 $PAGE->set_title(get_string('helloworld', 'tool_fskandalis'));
 $PAGE->set_heading(get_string('pluginname', 'tool_fskandalis'));
 
-echo get_string('helloworld', 'tool_fskandalis');
+
+echo $OUTPUT->header();
+echo $OUTPUT->heading(get_string('helloworld', 'tool_fskandalis'));
+echo html_writer::span(get_string('idpassed', 'tool_fskandalis', $id));
+echo $OUTPUT->footer();
