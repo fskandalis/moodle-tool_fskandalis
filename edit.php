@@ -27,6 +27,7 @@ require('../../../config.php');
 require_once($CFG->dirroot.'/admin/tool/fskandalis/lib.php');
 
 $id = optional_param('id', 0, PARAM_INT);
+$deleteid = optional_param('delete', null, PARAM_INT);
 
 if ($id) {
     $record = $DB->get_record('tool_fskandalis', array('id' => $id), '*', MUST_EXIST);
@@ -50,6 +51,16 @@ require_capability('tool/fskandalis:edit', $context);
 
 $PAGE->set_title($title);
 $PAGE->set_heading(get_string('pluginname', 'tool_fskandalis'));
+
+// take care of deleting an entry
+if ($deleteid) {
+    require_sesskey();
+    $record = $DB->get_record('tool_fskandalis', array('id' => $deleteid, 'courseid' => $courseid),
+        '*', MUST_EXIST);
+    require_capability('tool/fskandalis:edit', $context);
+    $DB->delete_records('tool_fskandalis', array('id' => $deleteid));
+    redirect(new moodle_url('/admin/tool/fskandalis/index.php', array('id' => $courseid)));
+}
 
 $form = new tool_fskandalis_form();
 $form->set_data($record);

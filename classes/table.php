@@ -82,8 +82,11 @@ class tool_fskandalis_table extends table_sql {
     }
 
     protected function col_edit($row) {
-        $url = new moodle_url('/admin/tool/fskandalis/edit.php', array('id' => $row->id));
-        return html_writer::link($url, get_string('editrecord', 'tool_fskandalis'));
+        $urledit = new moodle_url('/admin/tool/fskandalis/edit.php', array('id' => $row->id));
+        $urldelete = new moodle_url('/admin/tool/fskandalis/edit.php',
+            array('delete' => $row->id, 'courseid' => $this->context->instanceid, 'sesskey' => sesskey()));
+        return html_writer::link($urledit, get_string('editrecord', 'tool_fskandalis')) . ' | ' .
+               html_writer::link($urldelete, get_string('deleterecord', 'tool_fskandalis'));
     }
 
     protected function col_timecreated($row) {
