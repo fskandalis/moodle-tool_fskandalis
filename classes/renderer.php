@@ -15,32 +15,33 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * Main file
+ * Class tool_fskandalis_renderer
  *
  * @package    tool_fskandalis
  * @copyright  2018 Fotis Skandalis
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-require_once(__DIR__ . '/../../../config.php');
+defined('MOODLE_INTERNAL') || die();
 
-$id = required_param('id', PARAM_INT);
+use tool_fskandalis\output\records_list;
 
-$url = new moodle_url('/admin/tool/fskandalis/index.php', array('id' => $id));
-
-$PAGE->set_context(context_system::instance());
-$PAGE->set_url($url);
-
-require_login($id);
-$context = context_course::instance($id);
-require_capability('tool/fskandalis:view', $context);
-
-$PAGE->set_pagelayout('report');
-$PAGE->set_title(get_string('helloworld', 'tool_fskandalis'));
-$PAGE->set_heading(get_string('pluginname', 'tool_fskandalis'));
-
-$outputpage = new \tool_fskandalis\output\records_list($id);
-$output = $PAGE->get_renderer('tool_fskandalis');
-echo $output->header();
-echo $output->render($outputpage);
-echo $output->footer();
+/**
+ * Renderer for tool_fskandalis
+ *
+ * @package    tool_fskandalis
+ * @copyright  2018 Fotis Skandalis
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+class tool_fskandalis_renderer extends plugin_renderer_base {
+    /**
+     * Renders a record list.
+     *
+     * @param records_list $list
+     * @return string HTML
+     */
+    protected function render_records_list(records_list $list) {
+        $context = $list->export_for_template($this);
+        return $this->render_from_template('tool_fskandalis/records_list', $context);
+    }
+}

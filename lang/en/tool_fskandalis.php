@@ -37,3 +37,4 @@ $string['editrecord'] = 'Edit record';
 $string['deleterecord'] = 'Delete record';
 $string['errornameexists'] = 'This name already exists!';
 $string['description'] = 'Description';
+$string['currentcourseis'] = 'The current course id is {$a}';
