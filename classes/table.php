@@ -40,6 +40,8 @@ class tool_fskandalis_table extends table_sql {
 
         parent::__construct($uniqueid);
 
+        $this->set_attribute('id', 'tool_fskandalis_table');
+
         $this->context = context_course::instance($courseid);
 
         $columns = array('name', 'completed', 'priority', 'timecreated', 'timemodified');
