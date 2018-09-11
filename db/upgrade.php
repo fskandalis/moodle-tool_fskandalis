@@ -80,5 +80,25 @@ function xmldb_tool_fskandalis_upgrade($oldversion) {
         upgrade_plugin_savepoint(true, 2018090504, 'tool', 'fskandalis');
     }
 
+    if ($oldversion < 2018091102) {
+
+        // Define field description to be added to tool_fskandalis.
+        $table = new xmldb_table('tool_fskandalis');
+        $field = new xmldb_field('description', XMLDB_TYPE_TEXT, null, null, null, null, null, 'timemodified');
+        // Conditionally launch add field description.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+        // Define field descriptionformat to be added to tool_fskandalis.
+        $field = new xmldb_field('descriptionformat', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'description');
+        // Conditionally launch add field description.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Fskandalis savepoint reached.
+        upgrade_plugin_savepoint(true, 2018091102, 'tool', 'fskandalis');
+    }
+
     return true;
 }

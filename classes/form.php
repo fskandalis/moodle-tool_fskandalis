@@ -41,6 +41,10 @@ class tool_fskandalis_form extends moodleform {
         $mform->addElement('advcheckbox', 'completed',
             get_string('completed', 'tool_fskandalis'));
 
+        $mform->addElement('editor', 'description_editor',
+            get_string('description', 'tool_fskandalis'),
+            null, tool_fskandalis_api::editor_options());
+
         $mform->addElement('hidden', 'courseid');
         $mform->setType('courseid', PARAM_INT);
 

@@ -25,17 +25,18 @@ Feature: Creating, editing and deleting entries
     And I set the following fields to these values:
       | Name        | test entry 1      |
       | Completed   | 0                 |
+      | Description | Test desc         |
     And I press "Save changes"
     Then the following should exist in the "tool_fskandalis_table" table:
-      | Name         | Completed |
-      | test entry 1 | No        |
+      | Name         | Completed | Description |
+      | test entry 1 | No        | Test desc   |
     And I click on "Edit record" "link" in the "test entry 1" "table_row"
     And I set the following fields to these values:
       | Completed | 1 |
     And I press "Save changes"
     And the following should exist in the "tool_fskandalis_table" table:
-      | Name         | Completed |
-      | test entry 1 | Yes       |
+      | Name         | Completed | Description |
+      | test entry 1 | Yes        | Test desc   |
     And I log out
 
   Scenario: Delete an entry with javascript disabled

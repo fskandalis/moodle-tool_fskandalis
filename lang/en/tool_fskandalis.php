@@ -36,3 +36,4 @@ $string['newrecord'] = 'Add new record';
 $string['editrecord'] = 'Edit record';
 $string['deleterecord'] = 'Delete record';
 $string['errornameexists'] = 'This name already exists!';
+$string['description'] = 'Description';

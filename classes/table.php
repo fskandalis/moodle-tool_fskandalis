@@ -44,9 +44,10 @@ class tool_fskandalis_table extends table_sql {
 
         $this->context = context_course::instance($courseid);
 
-        $columns = array('name', 'completed', 'priority', 'timecreated', 'timemodified');
+        $columns = array('name', 'description', 'completed', 'priority', 'timecreated', 'timemodified');
         $headers = array(
             get_string('name', 'tool_fskandalis'),
+            get_string('description', 'tool_fskandalis'),
             get_string('completed', 'tool_fskandalis'),
             get_string('priority', 'tool_fskandalis'),
             get_string('timecreated', 'tool_fskandalis'),
@@ -67,7 +68,7 @@ class tool_fskandalis_table extends table_sql {
 
         $this->define_baseurl($PAGE->url);
 
-        $this->set_sql('id, name, completed, priority, timecreated, timemodified',
+        $this->set_sql('id, name, description, descriptionformat, completed, priority, timecreated, timemodified',
             '{tool_fskandalis}', 'courseid = ?', [$courseid]);
     }
 
@@ -97,5 +98,12 @@ class tool_fskandalis_table extends table_sql {
 
     protected function col_timemodified($row) {
         return userdate($row->timemodified, get_string('strftimedatetime'));
+    }
+
+    protected function col_description($row) {
+        $options = tool_fskandalis_api::editor_options();
+        $description = file_rewrite_pluginfile_urls($row->description, 'pluginfile.php',
+            $options['context']->id, 'tool_fskandalis', 'record', $row->id, $options);
+        return format_text($description, $row->descriptionformat, $options);
     }
 }

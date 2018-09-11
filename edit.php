@@ -35,7 +35,7 @@ if ($id) {
     $title = get_string('editrecord', 'tool_fskandalis');
     $params = array('id' => $id);
 } else {
-    // We are going to add an entry. Parameter courseid is required.
+    // We are going to add an
     $courseid = required_param('courseid', PARAM_INT);
     $record = (object)array('courseid' => $courseid);
     $title = get_string('newrecord', 'tool_fskandalis');
@@ -63,6 +63,11 @@ if ($deleteid) {
 }
 
 $form = new tool_fskandalis_form();
+if (!empty($record->id)) {
+    file_prepare_standard_editor($record, 'description',
+        tool_fskandalis_api::editor_options($courseid),
+        $PAGE->context, 'tool_fskandalis', 'record', $record->id);
+}
 $form->set_data($record);
 
 $returnurl = new moodle_url('/admin/tool/fskandalis/index.php', array('id' => $courseid));
@@ -71,21 +76,9 @@ if ($form->is_cancelled()) {
     redirect($returnurl);
 } else if ($data = $form->get_data()) {
     if ($data->id) {
-        $DB->update_record('tool_fskandalis', array(
-            'id' => $data->id,
-            'name' => $data->name,
-            'completed' => $data->completed,
-            'timemodified' => time()
-        ));
+        tool_fskandalis_api::update($data);
     } else {
-        $DB->insert_record('tool_fskandalis', array(
-            'courseid' => $data->courseid,
-            'name' => $data->name,
-            'completed' => $data->completed,
-            'priority' => 0,
-            'timecreated' => time(),
-            'timemodified' => time()
-        ));
+        tool_fskandalis_api::insert($data);
     }
     redirect($returnurl);
 }

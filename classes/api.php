@@ -1,4 +1,3 @@
-
 <?php
 // This file is part of Moodle - http://moodle.org/
 //
@@ -59,7 +58,16 @@ class tool_fskandalis_api {
             array('courseid' => 1, 'name' => 1, 'completed' => 1, 'priority' => 1));
         $insertdata['timemodified'] = $insertdata['timecreated'] = time();
 
-        return $DB->insert_record('tool_fskandalis', $insertdata);
+        $recordid = $DB->insert_record('tool_fskandalis', $insertdata);
+        if (isset($data->description_editor)) {
+            $context = context_course::instance($data->courseid);
+            $data = file_postupdate_standard_editor($data, 'description',
+                self::editor_options(), $context, 'tool_fskandalis', 'record', $recordid);
+            $updatedata = array('id' => $recordid, 'description' => $data->description,
+                'descriptionformat' => $data->descriptionformat);
+            $DB->update_record('tool_fskandalis', $updatedata);
+        }
+        return $recordid;
     }
 
     /**
@@ -68,7 +76,7 @@ class tool_fskandalis_api {
      * @param $id id of the record
      * @param $courseid optional course id for validation
      * @param $strictness
-     * @return stdClass|bool retrieved object or false if entry not found and strictness is IGNORE_MISSING
+     * @return stdClass|bool retrieved object or false if record not found and strictness is IGNORE_MISSING
      * @throws dml_exception
      */
     public static function retrieve($id, $courseid = 0, $strictness = MUST_EXIST) {
@@ -78,5 +86,38 @@ class tool_fskandalis_api {
             $params['courseid'] = $courseid;
         }
         return $DB->get_record('tool_fskandalis', $params, '*', $strictness);
+    }
+
+    /**
+     * Options for the description editor
+     * @return array
+     */
+    public static function editor_options() {
+        global $PAGE;
+        return [
+            'maxfiles' => -1,
+            'maxbytes' => 0,
+            'context' => $PAGE->context,
+            'noclean' => true,
+        ];
+    }
+
+    /**
+     * Update a record
+     *
+     * @param stdClass $data
+     */
+    public static function update(stdClass $data) {
+        global $DB, $PAGE;
+
+        if (isset($data->description_editor)) {
+            $data = file_postupdate_standard_editor($data, 'description',
+                self::editor_options(), $PAGE->context, 'tool_fskandalis', 'record', $data->id);
+        }
+        $updatedata = array_intersect_key((array)$data,
+            array('id' => 1, 'name' => 1, 'completed' => 1, 'priority' => 1,
+                'description' => 1, 'descriptionformat' => 1));
+        $updatedata['timemodified'] = time();
+        $DB->update_record('tool_fskandalis', $updatedata);
     }
 }

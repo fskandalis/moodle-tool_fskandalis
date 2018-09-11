@@ -22,8 +22,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018091101; // The current plugin version (Date: YYYYMMDDXX).
+$plugin->version   = 2018091103; // The current plugin version (Date: YYYYMMDDXX).
 $plugin->requires  = 2018050800; // Requires this Moodle version.
-$plugin->release   = 'v2';     // Release name.
+$plugin->release   = 'v2.1';     // Release name.
 $plugin->maturity  = MATURITY_STABLE;  // Maturity.
 $plugin->component = 'tool_fskandalis'; // Full name of the plugin (used for diagnostics).

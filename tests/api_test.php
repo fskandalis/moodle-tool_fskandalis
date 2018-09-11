@@ -29,6 +29,7 @@ global $CFG;
 /**
  * API tests.
  *
+ * @group      tool_fskandalis
  * @package    tool_fskandalis
  * @copyright  2018 Fotis Skandalis
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
@@ -37,7 +38,6 @@ class tool_fskandalis_api_testcase extends advanced_testcase {
 
     /**
      * Set up for the tests.
-     * @group      tool_fskandalis
      */
     public function setUp() {
         $this->resetAfterTest();
@@ -45,7 +45,6 @@ class tool_fskandalis_api_testcase extends advanced_testcase {
 
     /**
      * Test for tool_fskandalis_api::delete
-     * @group      tool_fskandalis
      */
     public function test_delete() {
         $course = $this->getDataGenerator()->create_course();
@@ -56,5 +55,35 @@ class tool_fskandalis_api_testcase extends advanced_testcase {
         tool_fskandalis_api::delete($recordid);
         $entry = tool_fskandalis_api::retrieve($recordid, 0, IGNORE_MISSING);
         $this->assertEmpty($entry);
+    }
+
+    public function test_description_editor() {
+        $this->setAdminUser();
+        $course = $this->getDataGenerator()->create_course();
+        $recordid = tool_fskandalis_api::insert((object)array(
+            'courseid' => $course->id,
+            'name' => 'testname1',
+            'description_editor' => array(
+                'text' => 'some description',
+                'format' => FORMAT_HTML,
+                'itemid' => file_get_unused_draft_itemid()
+            )
+        ));
+        $record = tool_fskandalis_api::retrieve($recordid);
+        $this->assertEquals('some description', $record->description);
+
+        tool_fskandalis_api::update((object)[
+            'id' => $recordid,
+            'name' => 'testname2',
+            'description_editor' => [
+                'text' => 'description edited',
+                'format' => FORMAT_HTML,
+                'itemid' => file_get_unused_draft_itemid()
+            ]
+        ]);
+        $record = tool_fskandalis_api::retrieve($recordid);
+        $this->assertEquals($course->id, $record->courseid);
+        $this->assertEquals('testname2', $record->name);
+        $this->assertEquals('description edited', $record->description);
     }
 }
