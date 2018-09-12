@@ -66,6 +66,7 @@ Feature: Creating, editing and deleting entries
     And I set the field "Name" to "test entry 2"
     And I press "Save changes"
     And I click on "Delete record" "link" in the "test entry 1" "table_row"
+    And I press "Yes"
     Then I should see "test entry 2"
     And I should not see "test entry 1"
     And I log out

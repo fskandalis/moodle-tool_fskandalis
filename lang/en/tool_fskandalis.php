@@ -38,3 +38,4 @@ $string['deleterecord'] = 'Delete record';
 $string['errornameexists'] = 'This name already exists!';
 $string['description'] = 'Description';
 $string['currentcourseis'] = 'The current course id is {$a}';
+$string['confirmdeleterecord'] = 'Are you sure you want to delete this record?';

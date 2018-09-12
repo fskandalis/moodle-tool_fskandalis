@@ -89,7 +89,8 @@ class tool_fskandalis_table extends table_sql {
         $urldelete = new moodle_url('/admin/tool/fskandalis/edit.php',
             array('delete' => $row->id, 'courseid' => $this->context->instanceid, 'sesskey' => sesskey()));
         return html_writer::link($urledit, get_string('editrecord', 'tool_fskandalis')) . ' | ' .
-               html_writer::link($urldelete, get_string('deleterecord', 'tool_fskandalis'));
+               html_writer::link($urldelete, get_string('deleterecord', 'tool_fskandalis'),
+                   array('data-action' => 'deleteentry'));
     }
 
     protected function col_timecreated($row) {
