@@ -21,47 +21,80 @@
  * @copyright  2018 Fotis Skandalis
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-define(['jquery', 'core/str', 'core/notification'], function($, str, notification) {
+define(['jquery', 'core/str', 'core/notification', 'core/ajax', 'core/templates'],
+    function($, str, notification, ajax, templates) {
 
-    /**
-     * Displays the delete confirmation and on approval redirects to href
-     * @param {String} href
-     */
-    var confirmDelete = function(href) {
-        str.get_strings([
-            {key: 'delete'},
-            {key: 'confirmdeleterecord', component: 'tool_fskandalis'},
-            {key: 'yes'},
-            {key: 'no'}
-        ]).done(function(s) {
-                notification.confirm(s[0], s[1], s[2], s[3], function() {
-                    window.location.href = href;
-                });
-            }
-        ).fail(notification.exception);
-    };
-
-    /**
-     * Registers the handler for click event
-     * @param {String} selector
-     */
-    var registerClickHandler = function(selector) {
-        $(selector).on('click', function(e) {
-            e.preventDefault();
-            var href = $(e.currentTarget).attr('href');
-            confirmDelete(href);
-        });
-    };
-
-    return /** @alias module:tool_fskandalis/confirm */ {
         /**
-         * Initialise the confirmation for selector
-         *
-         * @method init
+         * Replaces the current list with the data rendered from template
+         * @param {Object} data
+         * @param {jQuery} list
+         */
+        var reloadList = function(data, list) {
+            templates.render('tool_fskandalis/records_list', data).done(function(html) {
+                list.replaceWith(html);
+            });
+        };
+
+        /**
+         * Processes deleting a record
+         * @param {Number} id
+         * @param {jQuery} list
+         */
+        var processDelete = function(id, list) {
+            var courseid = list.attr('data-courseid');
+            var requests = ajax.call([{
+                methodname: 'tool_fskandalis_delete_record',
+                args: {id: id}
+            }, {
+                methodname: 'tool_fskandalis_records_list',
+                args: {courseid: courseid}
+            }]);
+            requests[1].done(function(data) {
+                reloadList(data, list);
+            }).fail(notification.exception);
+        };
+
+        /**
+         * Displays the delete confirmation and on approval redirects to href
+         * @param {Number} id
+         * @param {jQuery} list
+         */
+        var confirmDelete = function(id, list) {
+            str.get_strings([
+                {key: 'delete'},
+                {key: 'confirmdeleterecord', component: 'tool_fskandalis'},
+                {key: 'yes'},
+                {key: 'no'}
+            ]).done(function(s) {
+                    notification.confirm(s[0], s[1], s[2], s[3], function() {
+                        processDelete(id, list);
+                    });
+                }
+            ).fail(notification.exception);
+        };
+
+        /**
+         * Registers the handler for click event
          * @param {String} selector
          */
-        init: function(selector) {
-            registerClickHandler(selector);
-        }
-    };
+        var registerClickHandler = function(selector) {
+            $(selector).on('click', function(e) {
+                e.preventDefault();
+                var id = $(e.currentTarget).attr('data-recordid'),
+                    list = $(e.currentTarget).closest('.tool_fskandalis_records_list');
+                confirmDelete(id, list);
+            });
+        };
+
+        return /** @alias module:tool_fskandalis/confirm */ {
+            /**
+             * Initialise the confirmation for selector
+             *
+             * @method init
+             * @param {String} selector
+             */
+            init: function(selector) {
+                registerClickHandler(selector);
+            }
+        };
 });
