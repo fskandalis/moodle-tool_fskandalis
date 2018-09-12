@@ -55,10 +55,9 @@ $PAGE->set_heading(get_string('pluginname', 'tool_fskandalis'));
 // take care of deleting an entry
 if ($deleteid) {
     require_sesskey();
-    $record = $DB->get_record('tool_fskandalis', array('id' => $deleteid, 'courseid' => $courseid),
-        '*', MUST_EXIST);
+    $record = tool_fskandalis_api::retrieve($deleteid, $courseid);
     require_capability('tool/fskandalis:edit', $context);
-    $DB->delete_records('tool_fskandalis', array('id' => $deleteid));
+    tool_fskandalis_api::delete($deleteid);
     redirect(new moodle_url('/admin/tool/fskandalis/index.php', array('id' => $courseid)));
 }
 

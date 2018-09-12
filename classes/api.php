@@ -42,7 +42,20 @@ class tool_fskandalis_api {
      */
     public static function delete($id) {
         global $DB;
+
+        if (!$record = self::retrieve($id, 0, IGNORE_MISSING)) {
+            return;
+        }
+
         $DB->delete_records('tool_fskandalis', array('id' => $id));
+
+        // Trigger event.
+        $event = \tool_fskandalis\event\record_deleted::create(array(
+            'context' => context_course::instance($record->courseid),
+            'objectid' => $id
+        ));
+        $event->add_record_snapshot('tool_fskandalis', $record);
+        $event->trigger();
     }
 
     /**
@@ -67,6 +80,14 @@ class tool_fskandalis_api {
                 'descriptionformat' => $data->descriptionformat);
             $DB->update_record('tool_fskandalis', $updatedata);
         }
+
+        // Trigger event.
+        $event = \tool_fskandalis\event\record_created::create(array(
+            'context' => context_course::instance($data->courseid),
+            'objectid' => $recordid
+        ));
+        $event->trigger();
+
         return $recordid;
     }
 
@@ -119,5 +140,24 @@ class tool_fskandalis_api {
                 'description' => 1, 'descriptionformat' => 1));
         $updatedata['timemodified'] = time();
         $DB->update_record('tool_fskandalis', $updatedata);
+
+        // Trigger event.
+        $record = self::retrieve($data->id);
+        $event = \tool_fskandalis\event\record_updated::create(array(
+            'context' => context_course::instance($record->courseid),
+            'objectid' => $record->id
+        ));
+        $event->add_record_snapshot('tool_fskandalis', $record);
+        $event->trigger();
+    }
+
+    /**
+     * Observer for course_deleted event - deletes all associated entries
+     *
+     * @param \core\event\course_deleted $event
+     */
+    public static function course_deleted_observer(\core\event\course_deleted $event) {
+        global $DB;
+        $DB->delete_records('tool_fskandalis', array('courseid' => $event->objectid));
     }
 }
