@@ -28,13 +28,12 @@ $id = required_param('id', PARAM_INT);
 
 $url = new moodle_url('/admin/tool/fskandalis/index.php', array('id' => $id));
 
-$PAGE->set_context(context_system::instance());
-$PAGE->set_url($url);
-
 require_login($id);
 $context = context_course::instance($id);
 require_capability('tool/fskandalis:view', $context);
 
+$PAGE->set_context($context);
+$PAGE->set_url($url);
 $PAGE->set_pagelayout('report');
 $PAGE->set_title(get_string('helloworld', 'tool_fskandalis'));
 $PAGE->set_heading(get_string('pluginname', 'tool_fskandalis'));
