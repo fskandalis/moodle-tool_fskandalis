@@ -15,15 +15,18 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * @package   tool_fskandalis
- * @copyright 2018, Fotis Skandalis
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * Add event handlers for the tool_fskandalis
+ *
+ * @package    tool_fskandalis
+ * @copyright  2018 Fotis Skandalis
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->version   = 2018091203; // The current plugin version (Date: YYYYMMDDXX).
-$plugin->requires  = 2018050800; // Requires this Moodle version.
-$plugin->release   = 'v2.4.3';     // Release name.
-$plugin->maturity  = MATURITY_STABLE;  // Maturity.
-$plugin->component = 'tool_fskandalis'; // Full name of the plugin (used for diagnostics).
+$observers = array(
+    array(
+        'eventname' => '\core\event\course_deleted',
+        'callback' => 'tool_fskandalis_api::course_deleted_observer',
+    ),
+);
